@@ -17,19 +17,14 @@
 
 import numpy as _np
 import matplotlib.pyplot as _plt
+import core as _core
 
 class Distances(object):
     def __init__(self, points):
         self.points = points
         self.npoints = self.points.shape[0]
-        self._get_distances()
+        self.distances = _core.get_distances(self.points)
         self.max_distance = self.distances.max()
-    def _get_distances(self):
-        self.distances = _np.zeros(shape=(self.npoints, self.npoints), dtype=_np.float64)
-        for i in range(self.npoints - 1):
-            for j in range(i + 1, self.npoints):
-                self.distances[i, j] = _np.linalg.norm(self.points[i, :] - self.points[j, :])
-                self.distances[j, i] = self.distances[i, j]
 
 class Density(Distances):
     def __init__(self, points, fraction):
