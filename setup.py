@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup, Extension
+import versioneer
 
 # def extensions():
 #     from numpy import get_include
@@ -44,10 +45,10 @@ from setuptools import setup, Extension
 #     def __len__(self): return len(self.c_list())
 
 setup(
-    #cmdclass=versioneer.get_cmdclass(),
+    cmdclass=versioneer.get_cmdclass(),
     #ext_modules=lazy_cythonize(extensions),
     name='pydpc',
-    version='0.0.1',# versioneer.get_version(),
+    version=versioneer.get_version(),
     description='',
     long_description='',
     classifiers=[
