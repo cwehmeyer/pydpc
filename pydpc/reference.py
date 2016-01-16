@@ -19,8 +19,9 @@ import numpy as _np
 import matplotlib.pyplot as _plt
 
 class LaioCluster(object):
-    def __init__(self, fraction=0.02):
+    def __init__(self, fraction=0.02, autoplot=True):
         self.fraction = fraction
+        self.autoplot = autoplot
     def load(self, points):
         self.points = points
         self.npoints = self.points.shape[0]
@@ -28,7 +29,8 @@ class LaioCluster(object):
         self._get_kernel_size()
         self._get_density()
         self._get_delta_and_neighbour()
-        self.draw_decision_graph()
+        if self.autoplot:
+            self.draw_decision_graph()
     def draw_decision_graph(self, min_density=None, min_delta=None):
         fig, ax = _plt.subplots(figsize=(8, 4.5))
         ax.scatter(self.density, self.delta, s=40)
@@ -44,7 +46,8 @@ class LaioCluster(object):
         self.min_density = min_density
         self.min_delta = min_delta
         self.border_only = border_only
-        self.draw_decision_graph(self.min_density, self.min_delta)
+        if self.autoplot:
+            self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
         self._get_membership()
         self._get_halo()

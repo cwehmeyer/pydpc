@@ -53,10 +53,12 @@ class Density(Distances):
                 self.density[j] += rho
 
 class Graph(Density):
-    def __init__(self, points, fraction):
+    def __init__(self, points, fraction, autoplot):
         super(Graph, self).__init__(points, fraction)
         self._get_delta_and_neighbour()
-        self.draw_decision_graph()
+        self.autoplot = autoplot
+        if self.autoplot:
+            self.draw_decision_graph()
     def _get_delta_and_neighbour(self):
         self.order = _np.argsort(self.density)[::-1]
         self.delta = _np.zeros(shape=self.order.shape, dtype=_np.float64)
@@ -84,13 +86,14 @@ class Graph(Density):
         return fig, ax
 
 class Cluster(Graph):
-    def __init__(self, points, fraction):
-        super(Cluster, self).__init__(points, fraction)
+    def __init__(self, points, fraction, autoplot=True):
+        super(Cluster, self).__init__(points, fraction, autoplot)
     def assign(self, min_density, min_delta, border_only=False):
         self.min_density = min_density
         self.min_delta = min_delta
         self.border_only = border_only
-        self.draw_decision_graph(self.min_density, self.min_delta)
+        if self.autoplot:
+            self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
         self._get_membership()
         self._get_halo()
