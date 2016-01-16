@@ -63,20 +63,13 @@ class Cluster(Graph):
         if self.autoplot:
             self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
-        self._get_membership()
+        self.membership = _core.get_membership(self.clusters, self.order, self.neighbour)
         self._get_halo()
     def _get_cluster_indices(self):
         self.clusters = _np.intersect1d(
             _np.where(self.density > self.min_density)[0],
-            _np.where(self.delta > self.min_delta)[0], assume_unique=True)
+            _np.where(self.delta > self.min_delta)[0], assume_unique=True).astype(_np.intc)
         self.nclusters = self.clusters.shape[0]
-    def _get_membership(self):
-        self.membership = -1 * _np.ones(shape=self.order.shape, dtype=_np.intc)
-        for i in range(self.nclusters):
-            self.membership[self.clusters[i]] = i
-        for i in range(self.npoints):
-            if self.membership[self.order[i]] == -1:
-                self.membership[self.order[i]] = self.membership[self.neighbour[self.order[i]]]
     def _get_halo(self):
         self.halo = self.membership.copy()
         self.border_density = _np.zeros(shape=(self.nclusters,), dtype=_np.float64)

@@ -25,5 +25,7 @@ extern double _get_kernel_size(double *distances, int npoints, double fraction);
 extern void _get_density(double kernel_size, double *distances, int npoints, double *density);
 extern void _get_delta_and_neighbour(
     double max_distance, double *distances, int *order, int npoints, double *delta, int *neighbour);
+extern void _get_membership(
+    int *clusters, int nclusters, int *order, int *neighbour, int npoints, int *membership);
 
 #endif

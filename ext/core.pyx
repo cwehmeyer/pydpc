@@ -25,6 +25,8 @@ cdef extern from "_core.h":
     void _get_delta_and_neighbour(
         double max_distance, double *distances, int *order,
         int npoints, double *delta, int *neighbour)
+    void _get_membership(
+        int *clusters, int nclusters, int *order, int *neighbour, int npoints, int *membership)
 
 def get_distances(_np.ndarray[double, ndim=2, mode="c"] points not None):
     npoints = points.shape[0]
@@ -64,3 +66,26 @@ def get_delta_and_neighbour(
         <double*> _np.PyArray_DATA(delta),
         <int*> _np.PyArray_DATA(neighbour))
     return delta, neighbour
+
+def get_membership(
+    _np.ndarray[int, ndim=1, mode="c"] clusters not None,
+    _np.ndarray[int, ndim=1, mode="c"] order not None,
+    _np.ndarray[int, ndim=1, mode="c"] neighbour not None):
+    npoints = order.shape[0]
+    membership = _np.zeros(shape=(npoints,), dtype=_np.intc)
+    _get_membership(
+        <int*> _np.PyArray_DATA(clusters),
+        clusters.shape[0],
+        <int*> _np.PyArray_DATA(order),
+        <int*> _np.PyArray_DATA(neighbour),
+        npoints,
+        <int*> _np.PyArray_DATA(membership))
+    return membership
+
+
+
+
+
+
+
+

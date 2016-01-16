@@ -170,3 +170,28 @@ extern void _get_delta_and_neighbour(
     }
     delta[order[0]] = max_delta;
 }
+
+extern void _get_membership(
+    int *clusters, int nclusters, int *order, int *neighbour, int npoints, int *membership)
+{
+    int i;
+    for(i=0; i<npoints; ++i)
+        membership[i] = -1;
+    for(i=0; i<nclusters; ++i)
+        membership[clusters[i]] = i;
+    for(i=0; i<npoints; ++i)
+    {
+        if(membership[order[i]] == -1)
+            membership[order[i]] = membership[neighbour[order[i]]];
+    }
+}
+
+
+
+
+
+
+
+
+
+
