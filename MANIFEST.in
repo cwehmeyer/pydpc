@@ -1,2 +1,3 @@
 include versioneer.py
 include pydpc/_version.py
+include ext/_core.h
