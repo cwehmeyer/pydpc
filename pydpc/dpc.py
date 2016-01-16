@@ -99,5 +99,5 @@ class Cluster(Graph):
             for i in range(self.npoints):
                 if (self.density[i] < self.border_density[self.membership[i]]):
                     self.halo[i] = -1
-        self.halo_idx = (self.halo == -1)
-        self.core_idx = _np.invert(self.halo_idx)
+        self.halo_idx = _np.where(self.halo == -1)[0]
+        self.core_idx = _np.where(self.halo != -1)[0]

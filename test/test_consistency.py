@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pydpc.reference import LaioCluster as Ref
+from pydpc._reference import Cluster as Ref
 from pydpc.dpc import Cluster
 import numpy as np
 from numpy.testing import assert_array_equal, assert_almost_equal
@@ -47,7 +47,7 @@ class TestFourGaussians2D(object):
     def teardown(self):
         pass
     def test_distances(self):
-        assert_almost_equal(self.dpc.distances, self.ref.distance, decimal=10)
+        assert_almost_equal(self.dpc.distances, self.ref.distances, decimal=10)
     def test_distances(self):
         assert_almost_equal(self.dpc.kernel_size, self.ref.kernel_size, decimal=10)
     def test_density(self):
@@ -59,10 +59,14 @@ class TestFourGaussians2D(object):
     def test_neighbour(self):
         assert_array_equal(self.dpc.neighbour, self.ref.neighbour)
     def test_clusters(self):
-        assert_array_equal(self.dpc.clusters, self.ref.cluster)
+        assert_array_equal(self.dpc.clusters, self.ref.clusters)
     def test_membership(self):
         assert_array_equal(self.dpc.membership, self.ref.membership)
     def test_border_density(self):
         assert_almost_equal(self.dpc.border_density, self.ref.border_density, decimal=10)
     def test_border_member(self):
         assert_array_equal(self.dpc.border_member, self.ref.border_member)
+    def test_halo_idx(self):
+        assert_array_equal(self.dpc.halo_idx, self.ref.halo_idx)
+    def test_core_idx(self):
+        assert_array_equal(self.dpc.core_idx, self.ref.core_idx)
