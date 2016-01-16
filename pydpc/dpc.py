@@ -30,22 +30,8 @@ class Density(Distances):
     def __init__(self, points, fraction):
         super(Density, self).__init__(points)
         self.fraction = fraction
-        self._get_kernel_size()
-        self._get_density()
-    def _get_kernel_size(self):
-        arr = self.distances[0, 1:]
-        for i in range(1, self.npoints - 1):
-            arr = _np.hstack((arr, self.distances[i, i + 1:]))
-        arr = _np.sort(arr)
-        imax = int(_np.floor(0.5 + self.fraction * arr.shape[0]))
-        self.kernel_size = arr[imax]
-    def _get_density(self):
-        self.density = _np.zeros(shape=(self.npoints,), dtype=_np.float64)
-        for i in range(self.npoints - 1):
-            for j in range(i + 1, self.npoints):
-                rho = _np.exp(-(self.distances[i, j] / self.kernel_size)**2)
-                self.density[i] += rho
-                self.density[j] += rho
+        self.kernel_size = _core.get_kernel_size(self.distances, self.fraction)
+        self.density = _core.get_density(self.distances, self.kernel_size)
 
 class Graph(Density):
     def __init__(self, points, fraction, autoplot):
