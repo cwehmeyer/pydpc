@@ -20,6 +20,10 @@
 #ifndef PYDPC_HEADER
 #define PYDPC_HEADER
 
-
+extern void _get_distances(double *points, int npoints, int ndim, double *distances);
+extern double _get_kernel_size(double *distances, int npoints, double fraction);
+extern void _get_density(double kernel_size, double *distances, int npoints, double *density);
+extern void _get_delta_and_neighbour(
+    double max_distance, double *distances, int *order, int npoints, double *delta, int *neighbour);
 
 #endif

@@ -38,3 +38,135 @@
         #define NAN (INFINITY-INFINITY)
     #endif
 #endif
+
+/***************************************************************************************************
+*   static convenience functions (without cython wrappers)
+***************************************************************************************************/
+
+static double sqr(double x)
+{
+    return (x == 0.0) ? 0.0 : x * x;
+}
+
+static double distance(double *points, int n, int m, int ndim)
+{
+    int i, o = n * ndim, p = m * ndim;
+    double sum = 0.0;
+    for(i=0; i<ndim; ++i)
+        sum += sqr(points[o + i] - points[p + i]);
+    return sqrt(sum);
+}
+
+static void mixed_sort(double *array, int L, int R)
+/* mixed_sort() is based on examples from http://www.linux-related.de (2004) */
+{
+    int l, r;
+    double swap;
+    if(R - L > 25) /* use quicksort */
+    {
+        l = L - 1;
+        r = R;
+        for(;;)
+        {
+            while(array[++l] < array[R]);
+            while((array[--r] > array[R]) && (r > l));
+            if(l >= r) break;
+            swap = array[l];
+            array[l] = array[r];
+            array[r] = swap;
+        }
+        swap = array[l];
+        array[l] = array[R];
+        array[R] = swap;
+        mixed_sort(array, L, l - 1);
+        mixed_sort(array, l + 1, R);
+    }
+    else /* use insertion sort */
+    {
+        for(l=L+1; l<=R; ++l)
+        {
+            swap = array[l];
+            for(r=l-1; (r >= L) && (swap < array[r]); --r)
+                array[r + 1] = array[r];
+            array[r + 1] = swap;
+        }
+    }
+}
+
+/***************************************************************************************************
+*   pydpc core functions (with cython wrappers)
+***************************************************************************************************/
+
+extern void _get_distances(double *points, int npoints, int ndim, double *distances)
+{
+    int i, j, o;
+    for(i=0; i<npoints-1; ++i)
+    {
+        o = i * npoints;
+        for(j=i+1; j<npoints; ++j)
+        {
+            distances[o + j] = distance(points, i, j, ndim);
+            distances[j * npoints + i] = distances[o + j];
+        }
+    }
+}
+
+extern double _get_kernel_size(double *distances, int npoints, double fraction)
+{
+    int i, j, o, m = 0, n = (npoints * (npoints - 1)) / 2;
+    double kernel_size;
+    double *scratch = (double*) malloc(n * sizeof(double));
+    for(i=0; i<npoints-1; ++i)
+    {
+        o = i * npoints;
+        for(j=i+1; j<npoints; ++j)
+            scratch[m++] = distances[o + j];
+    }
+    mixed_sort(scratch, 0, n - 1);
+    kernel_size = scratch[(int) floor(0.5 + fraction * n)];
+    free(scratch);
+    return kernel_size;
+}
+
+extern void _get_density(double kernel_size, double *distances, int npoints, double *density)
+{
+    int i, j, o;
+    double rho;
+    for(i=0; i<npoints-1; ++i)
+    {
+        o = i * npoints;
+        for(j=i+1; j<npoints; ++j)
+        {
+            rho = exp(-sqr(distances[o + j] / kernel_size));
+            density[i] += rho;
+            density[j] += rho;
+        }
+    }
+}
+
+extern void _get_delta_and_neighbour(
+    double max_distance, double *distances, int *order, int npoints, double *delta, int *neighbour)
+{
+    int i, j, o;
+    double max_delta = 0.0;
+    for(i=0; i<npoints; ++i)
+    {
+        delta[order[i]] = max_distance;
+        neighbour[i] = -1;
+    }
+    delta[order[0]] = -1.0;
+    for(i=1; i<npoints; ++i)
+    {
+        o = order[i] * npoints;
+        for(j=0; j<i; ++j)
+        {
+            if(distances[o + order[j]] < delta[order[i]])
+            {
+                delta[order[i]] = distances[o + order[j]];
+                neighbour[order[i]] = order[j];
+            }
+        }
+        max_delta = (max_delta < delta[order[i]]) ? delta[order[i]] : max_delta;
+    }
+    delta[order[0]] = max_delta;
+}
