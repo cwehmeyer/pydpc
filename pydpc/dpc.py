@@ -36,23 +36,10 @@ class Density(Distances):
 class Graph(Density):
     def __init__(self, points, fraction, autoplot):
         super(Graph, self).__init__(points, fraction)
-        self._get_delta_and_neighbour()
         self.autoplot = autoplot
-        if self.autoplot:
-            self.draw_decision_graph()
-    def _get_delta_and_neighbour(self):
-        self.order = _np.argsort(self.density)[::-1]
-        self.delta = _np.zeros(shape=self.order.shape, dtype=_np.float64)
-        self.delta[self.order[0]] = -1.0
-        self.delta[self.order[1:]] = self.max_distance
-        self.neighbour = _np.empty_like(self.order)
-        self.neighbour[:] = -1
-        for i in range(1, self.npoints):
-            for j in range(i):
-                if self.distances[self.order[i], self.order[j]] < self.delta[self.order[i]]:
-                    self.delta[self.order[i]] = self.distances[self.order[i], self.order[j]]
-                    self.neighbour[self.order[i]] = self.order[j]
-        self.delta[self.order[0]] = self.delta.max()
+        self.order = _np.ascontiguousarray(_np.argsort(self.density).astype(_np.intc)[::-1])
+        self.delta, self.neighbour = _core.get_delta_and_neighbour(
+            self.order, self.distances, self.max_distance)
     def draw_decision_graph(self, min_density=None, min_delta=None):
         fig, ax = _plt.subplots(figsize=(8, 4.5))
         ax.scatter(self.density, self.delta, s=40)
