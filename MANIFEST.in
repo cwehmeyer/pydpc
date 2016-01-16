@@ -1,3 +1,7 @@
+include LICENSE
+
 include versioneer.py
 include pydpc/_version.py
-include ext/_core.h
+
+# include extension code
+recursive-include ext *.pyx *.c *.h

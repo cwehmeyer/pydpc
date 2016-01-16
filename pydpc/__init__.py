@@ -22,5 +22,7 @@ from ._version import get_versions
 __version__ = get_versions()['version']
 del get_versions
 
-
-
+__author__ = "Christoph Wehmeyer"
+__copyright__ = "Copyright 2016 Christoph Wehmeyer"
+__license__ = "LGPLv3+"
+__email__ = "christoph.wehmeyer@fu-berlin.de"

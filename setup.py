@@ -44,15 +44,21 @@ class lazy_cythonize(list):
     def __getitem__(self, ii): return self.c_list()[ii]
     def __len__(self): return len(self.c_list())
 
+def long_description():
+    ld = "Clustering by fast search and find of density peaks, designed by Alex Rodriguez"
+    ld += " and Alessandro Laio, is a density-based clustering algorithm. The pydpc package"
+    ld += " aims to make this algorithm available for Python users."
+    return ld
+
 setup(
     cmdclass=versioneer.get_cmdclass(),
     ext_modules=lazy_cythonize(extensions),
     name='pydpc',
     version=versioneer.get_version(),
-    description='',
-    long_description='',
+    description='A Python interface to Density Peak Clustering',
+    long_description=long_description(),
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
