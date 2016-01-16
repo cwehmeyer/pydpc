@@ -52,7 +52,7 @@ setup(
     description='',
     long_description='',
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Pre-Alpha',
         'Environment :: Console',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
