@@ -27,5 +27,11 @@ extern void _get_delta_and_neighbour(
     double max_distance, double *distances, int *order, int npoints, double *delta, int *neighbour);
 extern void _get_membership(
     int *clusters, int nclusters, int *order, int *neighbour, int npoints, int *membership);
+extern void _get_border(
+    double kernel_size, double *distances, double *density, int *membership, int npoints,
+    int *border_member, double *border_density);
+extern void _get_halo(
+    int border_only, double *border_density,
+    double *density, int *membership, int *border_member, int npoints, int *halo);
 
 #endif

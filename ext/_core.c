@@ -186,12 +186,42 @@ extern void _get_membership(
     }
 }
 
+extern void _get_border(
+    double kernel_size, double *distances, double *density, int *membership, int npoints,
+    int *border_member, double *border_density)
+{
+    int i, j, o;
+    double average_density;
+    for(i=0; i<npoints-1; ++i)
+    {
+        o = i * npoints;
+        for(j=i+1; j<npoints; ++j)
+        {
+            if((membership[i] != membership[j]) && (distances[o + j] < kernel_size))
+            {
+                average_density = 0.5 * (density[i] + density[j]);
+                if(border_density[membership[i]] < average_density)
+                    border_density[membership[i]] = average_density;
+                if(border_density[membership[j]] < average_density)
+                    border_density[membership[j]] = average_density;
+                border_member[i] = 1;
+                border_member[j] = 1;
+            }
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
+extern void _get_halo(
+    int border_only, double *border_density,
+    double *density, int *membership, int *border_member, int npoints, int *halo)
+{
+    int i;
+    for(i=0; i<npoints; ++i)
+    {
+        if(density[i] < border_density[membership[i]])
+        {
+            if((0 == border_only) || (1 == border_member[i]))
+                halo[i] = -1;
+        }
+    }
+}

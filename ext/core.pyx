@@ -27,6 +27,12 @@ cdef extern from "_core.h":
         int npoints, double *delta, int *neighbour)
     void _get_membership(
         int *clusters, int nclusters, int *order, int *neighbour, int npoints, int *membership)
+    void _get_border(
+        double kernel_size, double *distances, double *density, int *membership, int npoints,
+        int *border_member, double *border_density)
+    void _get_halo(
+        int border_only, double *border_density,
+        double *density, int *membership, int *border_member, int npoints, int *halo)
 
 def get_distances(_np.ndarray[double, ndim=2, mode="c"] points not None):
     npoints = points.shape[0]
@@ -82,10 +88,43 @@ def get_membership(
         <int*> _np.PyArray_DATA(membership))
     return membership
 
+def get_border(
+    kernel_size,
+    _np.ndarray[double, ndim=2, mode="c"] distances not None,
+    _np.ndarray[double, ndim=1, mode="c"] density not None,
+    _np.ndarray[int, ndim=1, mode="c"] membership not None,
+    nclusters):
+    npoints = distances.shape[0]
+    border_density = _np.zeros(shape=(nclusters,), dtype=_np.float64)
+    border_member = _np.zeros(shape=(npoints,), dtype=_np.intc)
+    _get_border(
+        kernel_size,
+        <double*> _np.PyArray_DATA(distances),
+        <double*> _np.PyArray_DATA(density),
+        <int*> _np.PyArray_DATA(membership),
+        npoints,
+        <int*> _np.PyArray_DATA(border_member),
+        <double*> _np.PyArray_DATA(border_density))
+    return border_density, border_member.astype(_np.bool)
 
-
-
-
-
-
-
+def get_halo(
+    _np.ndarray[double, ndim=1, mode="c"] density not None,
+    _np.ndarray[int, ndim=1, mode="c"] membership not None,
+    _np.ndarray[double, ndim=1, mode="c"] border_density not None,
+    _np.ndarray[int, ndim=1, mode="c"] border_member not None,
+    border_only=False):
+    halo = membership.copy()
+    flag = 0
+    if border_only:
+        flag = 1
+    _get_halo(
+        flag,
+        <double*> _np.PyArray_DATA(border_density),
+        <double*> _np.PyArray_DATA(density),
+        <int*> _np.PyArray_DATA(membership),
+        <int*> _np.PyArray_DATA(border_member),
+        density.shape[0],
+        <int*> _np.PyArray_DATA(halo))
+    halo_idx = _np.where(halo == -1)[0].astype(_np.intc)
+    core_idx = _np.where(halo != -1)[0].astype(_np.intc)
+    return halo_idx, core_idx

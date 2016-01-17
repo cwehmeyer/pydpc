@@ -40,6 +40,8 @@ class Graph(Density):
         self.order = _np.ascontiguousarray(_np.argsort(self.density).astype(_np.intc)[::-1])
         self.delta, self.neighbour = _core.get_delta_and_neighbour(
             self.order, self.distances, self.max_distance)
+        if self.autoplot:
+            self.draw_decision_graph()
     def draw_decision_graph(self, min_density=None, min_delta=None):
         fig, ax = _plt.subplots(figsize=(8, 4.5))
         ax.scatter(self.density, self.delta, s=40)
@@ -54,7 +56,7 @@ class Graph(Density):
         return fig, ax
 
 class Cluster(Graph):
-    def __init__(self, points, fraction, autoplot=True):
+    def __init__(self, points, fraction=0.02, autoplot=True):
         super(Cluster, self).__init__(points, fraction, autoplot)
     def assign(self, min_density, min_delta, border_only=False):
         self.min_density = min_density
@@ -64,33 +66,13 @@ class Cluster(Graph):
             self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
         self.membership = _core.get_membership(self.clusters, self.order, self.neighbour)
-        self._get_halo()
+        self.border_density, self.border_member = _core.get_border(
+            self.kernel_size, self.distances, self.density, self.membership, self.nclusters)
+        self.halo_idx, self.core_idx = _core.get_halo(
+            self.density, self.membership,
+            self.border_density, self.border_member.astype(_np.intc), border_only=border_only)
     def _get_cluster_indices(self):
         self.clusters = _np.intersect1d(
             _np.where(self.density > self.min_density)[0],
             _np.where(self.delta > self.min_delta)[0], assume_unique=True).astype(_np.intc)
         self.nclusters = self.clusters.shape[0]
-    def _get_halo(self):
-        self.halo = self.membership.copy()
-        self.border_density = _np.zeros(shape=(self.nclusters,), dtype=_np.float64)
-        self.border_member = _np.zeros(shape=self.membership.shape, dtype=_np.bool)
-        for i in range(self.npoints - 1):
-            for j in range(i + 1, self.npoints):
-                if (self.membership[i] != self.membership[j]) and (self.distances[i, j] < self.kernel_size):
-                    average_density = 0.5 * (self.density[i] + self.density[j])
-                    if self.border_density[self.membership[i]] < average_density:
-                        self.border_density[self.membership[i]] = average_density
-                    if self.border_density[self.membership[j]] < average_density:
-                        self.border_density[self.membership[j]] = average_density
-                    self.border_member[i] = True
-                    self.border_member[j] = True
-        if self.border_only:
-            for i in range(self.npoints):
-                if (self.density[i] < self.border_density[self.membership[i]]) and self.border_member[i]:
-                    self.halo[i] = -1
-        else:
-            for i in range(self.npoints):
-                if (self.density[i] < self.border_density[self.membership[i]]):
-                    self.halo[i] = -1
-        self.halo_idx = _np.where(self.halo == -1)[0]
-        self.core_idx = _np.where(self.halo != -1)[0]
