@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from pydpc._reference import Cluster as Ref
-from pydpc.dpc import Cluster
+from pydpc import Cluster
 import numpy as np
 from numpy.testing import assert_array_equal, assert_almost_equal
 

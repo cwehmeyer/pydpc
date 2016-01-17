@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import dpc
+from .dpc import Cluster
 
 from ._version import get_versions
 __version__ = get_versions()['version']

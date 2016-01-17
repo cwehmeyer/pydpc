@@ -17,7 +17,9 @@
 
 import numpy as _np
 import matplotlib.pyplot as _plt
-import core as _core
+from . import core as _core
+
+__all__ = ['Cluster']
 
 class Distances(object):
     def __init__(self, points):
