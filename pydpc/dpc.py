@@ -36,12 +36,16 @@ class Density(Distances):
         self.density = _core.get_density(self.distances, self.kernel_size)
 
 class Graph(Density):
-    def __init__(self, points, fraction, autoplot):
+    def __init__(self, points, fraction):
         super(Graph, self).__init__(points, fraction)
-        self.autoplot = autoplot
         self.order = _np.ascontiguousarray(_np.argsort(self.density).astype(_np.intc)[::-1])
         self.delta, self.neighbour = _core.get_delta_and_neighbour(
             self.order, self.distances, self.max_distance)
+
+class Cluster(Graph):
+    def __init__(self, points, fraction=0.02, autoplot=True):
+        super(Cluster, self).__init__(points, fraction)
+        self.autoplot = autoplot
         if self.autoplot:
             self.draw_decision_graph()
     def draw_decision_graph(self, min_density=None, min_delta=None):
@@ -56,10 +60,6 @@ class Graph(Density):
         ax.set_ylabel(r"delta / a.u.", fontsize=20)
         ax.tick_params(labelsize=15)
         return fig, ax
-
-class Cluster(Graph):
-    def __init__(self, points, fraction=0.02, autoplot=True):
-        super(Cluster, self).__init__(points, fraction, autoplot)
     def assign(self, min_density, min_delta, border_only=False):
         self.min_density = min_density
         self.min_delta = min_delta
