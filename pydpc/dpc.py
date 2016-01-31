@@ -49,7 +49,7 @@ class Cluster(Graph):
         if self.autoplot:
             self.draw_decision_graph()
     def draw_decision_graph(self, min_density=None, min_delta=None):
-        fig, ax = _plt.subplots(figsize=(8, 4.5))
+        fig, ax = _plt.subplots(figsize=(5, 5))
         ax.scatter(self.density, self.delta, s=40)
         if min_density is not None and min_delta is not None:
             ax.plot(
