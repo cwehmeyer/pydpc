@@ -22,29 +22,36 @@ from . import core as _core
 __all__ = ['Cluster']
 
 class Distances(object):
-    def __init__(self, points):
+    def __init__(self, points, distances = None):
         self.points = points
         self.npoints = self.points.shape[0]
-        self.distances = _core.get_distances(self.points)
+
+        if distances is None:
+            self.distances = _core.get_distances(self.points)
+        else:
+            if not distances.shape == (self.npoints, self.npoints):
+                raise ValueError("Distance matrix must have shape (n_points, n_points)")
+            self.distances = distances
+
         self.max_distance = self.distances.max()
 
 class Density(Distances):
-    def __init__(self, points, fraction):
-        super(Density, self).__init__(points)
+    def __init__(self, points, fraction, **kwargs):
+        super(Density, self).__init__(points, **kwargs)
         self.fraction = fraction
         self.kernel_size = _core.get_kernel_size(self.distances, self.fraction)
         self.density = _core.get_density(self.distances, self.kernel_size)
 
 class Graph(Density):
-    def __init__(self, points, fraction):
-        super(Graph, self).__init__(points, fraction)
+    def __init__(self, points, fraction, **kwargs):
+        super(Graph, self).__init__(points, fraction, **kwargs)
         self.order = _np.ascontiguousarray(_np.argsort(self.density).astype(_np.intc)[::-1])
         self.delta, self.neighbour = _core.get_delta_and_neighbour(
             self.order, self.distances, self.max_distance)
 
 class Cluster(Graph):
-    def __init__(self, points, fraction=0.02, autoplot=True):
-        super(Cluster, self).__init__(points, fraction)
+    def __init__(self, points, fraction=0.02, autoplot=True, **kwargs):
+        super(Cluster, self).__init__(points, fraction, **kwargs)
         self.autoplot = autoplot
         if self.autoplot:
             self.draw_decision_graph()
