@@ -1,0 +1,5 @@
+setuptools
+numpy
+cython
+matplotlib
+nose
