@@ -29,10 +29,18 @@ class Distances(object):
         self.max_distance = self.distances.max()
 
 class Density(Distances):
-    def __init__(self, points, fraction):
+    def __init__(self, points, fraction, kernel_size = None):
         super(Density, self).__init__(points)
         self.fraction = fraction
-        self.kernel_size = _core.get_kernel_size(self.distances, self.fraction)
+        if kernel_size is None:
+            self.kernel_size = _core.get_kernel_size(self.distances, self.fraction)
+        else:
+            self.kernel_size = kernel_size
+        if self.kernel_size <= 0:
+            raise ValueError(
+                ("kernel_size = %s is invalid; must be strictly positive."
+                 "This can occur in the degenerate case where the distance matrix is all zeros, check your input.") % self.kernel_size
+            )
         self.density = _core.get_density(self.distances, self.kernel_size)
 
 class Graph(Density):
