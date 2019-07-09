@@ -38,7 +38,7 @@ class Density(Distances):
             self.kernel_size = kernel_size
         if self.kernel_size <= 0:
             raise ValueError(
-                ("kernel_size = %s is invalid; must be strictly positive."
+                ("kernel_size = %s is invalid; must be strictly positive. "
                  "This can occur in the degenerate case where the distance matrix is all zeros, check your input.") % self.kernel_size
             )
         self.density = _core.get_density(self.distances, self.kernel_size)
