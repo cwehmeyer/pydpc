@@ -20,6 +20,7 @@ from pydpc import Cluster
 import numpy as np
 from numpy.testing import assert_array_equal, assert_almost_equal
 
+
 class TestFourGaussians2D(object):
     @classmethod
     def setup_class(cls):
@@ -29,44 +30,63 @@ class TestFourGaussians2D(object):
         cls.muy = 1.8
         cls.fraction = 0.02
         cls.points = np.zeros(shape=(cls.npoints, 2), dtype=np.float64)
-        cls.points[:, 0] = np.random.randn(cls.npoints) + \
-            cls.mux * (-1)**np.random.randint(0, high=2, size=cls.npoints)
-        cls.points[:, 1] = np.random.randn(cls.npoints) + \
-            cls.muy * (-1)**np.random.randint(0, high=2, size=cls.npoints)
+        cls.points[:, 0] = np.random.randn(cls.npoints) + cls.mux * (
+            -1
+        ) ** np.random.randint(0, high=2, size=cls.npoints)
+        cls.points[:, 1] = np.random.randn(cls.npoints) + cls.muy * (
+            -1
+        ) ** np.random.randint(0, high=2, size=cls.npoints)
         # cluster initialisation
         cls.ref = Ref(cls.fraction, autoplot=False)
         cls.ref.load(cls.points)
         cls.ref.assign(20, 1.5)
         cls.dpc = Cluster(cls.points, cls.fraction, autoplot=False)
         cls.dpc.assign(20, 1.5)
+
     @classmethod
     def teardown_class(cls):
         pass
+
     def setup(self):
         pass
+
     def teardown(self):
         pass
+
     def test_distances(self):
         assert_almost_equal(self.dpc.distances, self.ref.distances, decimal=10)
-    def test_distances(self):
+
+    def test_kernel_size(self):
         assert_almost_equal(self.dpc.kernel_size, self.ref.kernel_size, decimal=10)
+
     def test_density(self):
         assert_almost_equal(self.dpc.density, self.ref.density, decimal=10)
+
     def test_order(self):
         assert_array_equal(self.dpc.order, self.ref.order)
+
     def test_delta(self):
         assert_almost_equal(self.dpc.delta, self.ref.delta, decimal=10)
+
     def test_neighbour(self):
         assert_array_equal(self.dpc.neighbour, self.ref.neighbour)
+
     def test_clusters(self):
         assert_array_equal(self.dpc.clusters, self.ref.clusters)
+
     def test_membership(self):
         assert_array_equal(self.dpc.membership, self.ref.membership)
+
     def test_border_density(self):
-        assert_almost_equal(self.dpc.border_density, self.ref.border_density, decimal=10)
+        assert_almost_equal(
+            self.dpc.border_density, self.ref.border_density, decimal=10
+        )
+
     def test_border_member(self):
         assert_array_equal(self.dpc.border_member, self.ref.border_member)
+
     def test_halo_idx(self):
         assert_array_equal(self.dpc.halo_idx, self.ref.halo_idx)
+
     def test_core_idx(self):
         assert_array_equal(self.dpc.core_idx, self.ref.core_idx)
