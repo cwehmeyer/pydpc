@@ -1,5 +1,0 @@
-include LICENSE
-
-
-# include extension code
-recursive-include ext *.pyx *.c *.h
