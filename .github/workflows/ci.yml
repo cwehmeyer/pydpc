@@ -3,8 +3,8 @@ name: CI
 on:
   push:
     branches: [master, modernise]
-  pull_request: 
-  workflow_dispatch: 
+  pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
