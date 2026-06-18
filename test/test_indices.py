@@ -17,7 +17,6 @@
 
 from pydpc import Cluster
 import numpy as np
-from nose.tools import assert_true
 from numpy.testing import assert_array_less
 
 class TestFourGaussians2D(object):
@@ -49,7 +48,7 @@ class TestFourGaussians2D(object):
     def test_neighbour(self):
         assert_array_less(-2, self.dpc.neighbour)
         assert_array_less(self.dpc.neighbour, self.npoints)
-        assert_true((self.dpc.neighbour == -1).sum() == 1)
+        assert (self.dpc.neighbour == -1).sum() == 1
     def test_clusters(self):
         assert_array_less(-2, self.dpc.clusters)
         assert_array_less(self.dpc.clusters, self.npoints)

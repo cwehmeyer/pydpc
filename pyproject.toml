@@ -5,3 +5,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 version_file = "pydpc/_version.py"
 fallback_version = "0.1.3"
+
+[dependency-groups]
+dev = ["pytest", "pytest-cov"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]

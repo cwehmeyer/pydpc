@@ -83,14 +83,10 @@ setup(
         'numpy>=1.7',
         'cython>=0.20',
         'setuptools>=0.6'],
-    tests_require=[
-        'numpy>=1.7',
-        'nose>=1.3'],
     install_requires=[
         'numpy>=1.7',
         'matplotlib'],
     packages=['pydpc'],
-    test_suite='nose.collector',
     scripts=[]
 )
 

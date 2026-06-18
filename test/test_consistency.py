@@ -48,7 +48,7 @@ class TestFourGaussians2D(object):
         pass
     def test_distances(self):
         assert_almost_equal(self.dpc.distances, self.ref.distances, decimal=10)
-    def test_distances(self):
+    def test_kernel_size(self):
         assert_almost_equal(self.dpc.kernel_size, self.ref.kernel_size, decimal=10)
     def test_density(self):
         assert_almost_equal(self.dpc.density, self.ref.density, decimal=10)
