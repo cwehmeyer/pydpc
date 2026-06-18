@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [master, modernise]
+  pull-request: 
+  workflow-dispatch: 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11", "3.12"]
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      -uses: astral-sh/setup-uv@v5
+      -run: uv sync --frozen
+      -run: uv run pytest
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uvx ruff check .
+      - run: uvx ruff format --check .

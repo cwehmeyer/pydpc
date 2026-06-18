@@ -1,5 +1,6 @@
 # pydpc - a Python package for Density Peak-based Clustering
 
+![CI](https://github.com/cwehmeyer/pydpc/actions/workflows/ci.yml/badge.svg)
 [![PyPI version](https://badge.fury.io/py/pydpc.svg)](https://pypi.python.org/pypi/pydpc)
 [![PyPI downloads](https://img.shields.io/pypi/dm/pydpc.svg)](https://pypi.python.org/pypi/pydpc)
 
