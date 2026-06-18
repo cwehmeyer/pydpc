@@ -18,7 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from setuptools import setup, Extension
-import versioneer
 
 def extensions():
     from numpy import get_include
@@ -51,10 +50,9 @@ def long_description():
     return ld
 
 setup(
-    cmdclass=versioneer.get_cmdclass(),
+    use_scm_version=True,
     ext_modules=lazy_cythonize(extensions),
     name='pydpc',
-    version=versioneer.get_version(),
     description='Python package for Density Peak-based Clustering',
     long_description=long_description(),
     classifiers=[
