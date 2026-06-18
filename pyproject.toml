@@ -11,6 +11,29 @@ license = "LGPL-3.0-or-later"
 authors = [{ name = "Christoph Wehmeyer", email = "wehmeyer.chris@gmail.com" }]
 dependencies = ["numpy >= 1.7", "matplotlib"]
 dynamic = ["version"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+keywords = [
+    "clustering",
+    "density-peaks",
+    "unsupervised-learning",
+    "machine-learning",
+    "cython",
+]
+
+[project.urls]
+Homepage = "https://github.com/cwehmeyer/pydpc"
+Repository = "https://github.com/cwehmeyer/pydpc.git"
+Issues = "https://github.com/cwehmeyer/pydpc/issues"
 
 [dependency-groups]
 dev = ["pytest", "pytest-cov", "ruff", "pre-commit"]
