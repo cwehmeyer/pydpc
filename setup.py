@@ -50,43 +50,6 @@ def long_description():
     return ld
 
 setup(
-    use_scm_version=True,
     ext_modules=lazy_cythonize(extensions),
-    name='pydpc',
-    description='Python package for Density Peak-based Clustering',
-    long_description=long_description(),
-    classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Environment :: Console',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
-        'Natural Language :: English',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: POSIX',
-        'Operating System :: Microsoft :: Windows',
-        'Programming Language :: C',
-        'Programming Language :: Cython',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Topic :: Scientific/Engineering :: Bio-Informatics',
-        'Topic :: Scientific/Engineering :: Chemistry',
-        'Topic :: Scientific/Engineering :: Mathematics',
-        'Topic :: Scientific/Engineering :: Physics'],
-    keywords=[
-        'cluster',
-        'density'],
-    url='https://github.com/cwehmeyer/pydpc',
-    author='Christoph Wehmeyer',
-    author_email='christoph.wehmeyer@fu-berlin.de',
-    license='LGPLv3+',
-    setup_requires=[
-        'numpy>=1.7',
-        'cython>=0.20',
-        'setuptools>=0.6'],
-    install_requires=[
-        'numpy>=1.7',
-        'matplotlib'],
-    packages=['pydpc'],
-    scripts=[]
 )
 
