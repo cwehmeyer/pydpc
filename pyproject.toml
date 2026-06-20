@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=80", "wheel", "Cython", "numpy", "setuptools-scm>=8"]
+requires = ["setuptools>=80", "Cython", "numpy>=2", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,9 +8,33 @@ description = "Clustering by fast search and find of density peaks"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "LGPL-3.0-or-later"
+license-files = ["LICENSE"]
 authors = [{ name = "Christoph Wehmeyer", email = "wehmeyer.chris@gmail.com" }]
-dependencies = ["numpy >= 1.7", "matplotlib"]
+dependencies = ["numpy>=2", "matplotlib"]
 dynamic = ["version"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+keywords = [
+    "clustering",
+    "density-peaks",
+    "unsupervised-learning",
+    "machine-learning",
+    "cython",
+]
+
+[project.urls]
+Homepage = "https://github.com/cwehmeyer/pydpc"
+Repository = "https://github.com/cwehmeyer/pydpc.git"
+Issues = "https://github.com/cwehmeyer/pydpc/issues"
 
 [dependency-groups]
 dev = ["pytest", "pytest-cov", "ruff", "pre-commit"]
@@ -27,3 +51,12 @@ testpaths = ["test"]
 
 [tool.coverage.run]
 source = ["pydpc"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+extend-exclude = ["ext", "pydpc/_version.py"]
+force-exclude = true
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B"]

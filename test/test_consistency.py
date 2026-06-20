@@ -15,13 +15,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pydpc._reference import Cluster as Ref
-from pydpc import Cluster
 import numpy as np
-from numpy.testing import assert_array_equal, assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_array_equal
+
+from pydpc import Cluster
+from pydpc._reference import Cluster as Ref
 
 
-class TestFourGaussians2D(object):
+class TestFourGaussians2D:
     @classmethod
     def setup_class(cls):
         # data generation
@@ -30,12 +31,12 @@ class TestFourGaussians2D(object):
         cls.muy = 1.8
         cls.fraction = 0.02
         cls.points = np.zeros(shape=(cls.npoints, 2), dtype=np.float64)
-        cls.points[:, 0] = np.random.randn(cls.npoints) + cls.mux * (
-            -1
-        ) ** np.random.randint(0, high=2, size=cls.npoints)
-        cls.points[:, 1] = np.random.randn(cls.npoints) + cls.muy * (
-            -1
-        ) ** np.random.randint(0, high=2, size=cls.npoints)
+        cls.points[:, 0] = np.random.randn(cls.npoints) + cls.mux * (-1) ** np.random.randint(
+            0, high=2, size=cls.npoints
+        )
+        cls.points[:, 1] = np.random.randn(cls.npoints) + cls.muy * (-1) ** np.random.randint(
+            0, high=2, size=cls.npoints
+        )
         # cluster initialisation
         cls.ref = Ref(cls.fraction, autoplot=False)
         cls.ref.load(cls.points)
@@ -78,9 +79,7 @@ class TestFourGaussians2D(object):
         assert_array_equal(self.dpc.membership, self.ref.membership)
 
     def test_border_density(self):
-        assert_almost_equal(
-            self.dpc.border_density, self.ref.border_density, decimal=10
-        )
+        assert_almost_equal(self.dpc.border_density, self.ref.border_density, decimal=10)
 
     def test_border_member(self):
         assert_array_equal(self.dpc.border_member, self.ref.border_member)

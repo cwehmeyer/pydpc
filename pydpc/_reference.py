@@ -18,11 +18,11 @@
 r"""This module provides a previously tested development version. It is rather
 slow and only used for consistency checks"""
 
-import numpy as _np
 import matplotlib.pyplot as _plt
+import numpy as _np
 
 
-class Cluster(object):
+class Cluster:
     def __init__(self, fraction=0.02, autoplot=True):
         self.fraction = fraction
         self.autoplot = autoplot
@@ -68,14 +68,10 @@ class Cluster(object):
         self._get_halo()
 
     def _get_distances(self):
-        self.distances = _np.zeros(
-            shape=(self.npoints, self.npoints), dtype=_np.float64
-        )
+        self.distances = _np.zeros(shape=(self.npoints, self.npoints), dtype=_np.float64)
         for i in range(self.npoints - 1):
             for j in range(i + 1, self.npoints):
-                self.distances[i, j] = _np.linalg.norm(
-                    self.points[i, :] - self.points[j, :]
-                )
+                self.distances[i, j] = _np.linalg.norm(self.points[i, :] - self.points[j, :])
                 self.distances[j, i] = self.distances[i, j]
 
     def _get_kernel_size(self):
@@ -104,13 +100,8 @@ class Cluster(object):
         self.neighbour[:] = -1
         for i in range(1, self.npoints):
             for j in range(i):
-                if (
-                    self.distances[self.order[i], self.order[j]]
-                    < self.delta[self.order[i]]
-                ):
-                    self.delta[self.order[i]] = self.distances[
-                        self.order[i], self.order[j]
-                    ]
+                if self.distances[self.order[i], self.order[j]] < self.delta[self.order[i]]:
+                    self.delta[self.order[i]] = self.distances[self.order[i], self.order[j]]
                     self.neighbour[self.order[i]] = self.order[j]
         self.delta[self.order[0]] = self.delta.max()
 
@@ -128,9 +119,7 @@ class Cluster(object):
             self.membership[self.clusters[i]] = i
         for i in range(self.npoints):
             if self.membership[self.order[i]] == -1:
-                self.membership[self.order[i]] = self.membership[
-                    self.neighbour[self.order[i]]
-                ]
+                self.membership[self.order[i]] = self.membership[self.neighbour[self.order[i]]]
 
     def _get_halo(self):
         self.halo = self.membership.copy()

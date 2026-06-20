@@ -17,53 +17,63 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from setuptools import setup, Extension
+import numpy
+from Cython.Build import cythonize
+from setuptools import Extension, setup
+
+# def extensions():
+#     from numpy import get_include
+#     from Cython.Build import cythonize
+
+#     ext_core = Extension(
+#         "pydpc.core",
+#         sources=["ext/core.pyx", "ext/_core.c"],
+#         include_dirs=[get_include()],
+#         extra_compile_args=["-O3", "-std=c99"],
+#     )
+#     exts = [ext_core]
+#     return cythonize(exts)
 
 
-def extensions():
-    from numpy import get_include
-    from Cython.Build import cythonize
+# class lazy_cythonize(list):
+#     """evaluates extension list lazyly.
+#     pattern taken from http://tinyurl.com/qb8478q"""
 
-    ext_core = Extension(
-        "pydpc.core",
-        sources=["ext/core.pyx", "ext/_core.c"],
-        include_dirs=[get_include()],
-        extra_compile_args=["-O3", "-std=c99"],
-    )
-    exts = [ext_core]
-    return cythonize(exts)
+#     def __init__(self, callback):
+#         self._list, self.callback = None, callback
 
+#     def c_list(self):
+#         if self._list is None:
+#             self._list = self.callback()
+#         return self._list
 
-class lazy_cythonize(list):
-    """evaluates extension list lazyly.
-    pattern taken from http://tinyurl.com/qb8478q"""
+#     def __iter__(self):
+#         for e in self.c_list():
+#             yield e
 
-    def __init__(self, callback):
-        self._list, self.callback = None, callback
+#     def __getitem__(self, ii):
+#         return self.c_list()[ii]
 
-    def c_list(self):
-        if self._list is None:
-            self._list = self.callback()
-        return self._list
-
-    def __iter__(self):
-        for e in self.c_list():
-            yield e
-
-    def __getitem__(self, ii):
-        return self.c_list()[ii]
-
-    def __len__(self):
-        return len(self.c_list())
+#     def __len__(self):
+#         return len(self.c_list())
 
 
-def long_description():
-    ld = "Clustering by fast search and find of density peaks, designed by Alex Rodriguez"
-    ld += " and Alessandro Laio, is a density-peak-based clustering algorithm. The pydpc package"
-    ld += " aims to make this algorithm available for Python users."
-    return ld
+# def long_description():
+#     ld = "Clustering by fast search and find of density peaks, designed by Alex Rodriguez"
+#     ld += " and Alessandro Laio, is a density-peak-based clustering algorithm. The pydpc package"
+#     ld += " aims to make this algorithm available for Python users."
+#     return ld
 
 
 setup(
-    ext_modules=lazy_cythonize(extensions),
+    ext_modules=cythonize(
+        [
+            Extension(
+                "pydpc.core",
+                sources=["ext/core.pyx", "ext/_core.c"],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=["-O3", "-std=c99"],
+            )
+        ]
+    )
 )
