@@ -15,14 +15,15 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy as _np
 import matplotlib.pyplot as _plt
+import numpy as _np
+
 from . import core as _core
 
 __all__ = ["Cluster"]
 
 
-class Distances(object):
+class Distances:
     def __init__(self, points, distances=None):
         self.points = points
         self.npoints = self.points.shape[0]
@@ -39,7 +40,7 @@ class Distances(object):
 
 class Density(Distances):
     def __init__(self, points, fraction, kernel_size=None, **kwargs):
-        super(Density, self).__init__(points, **kwargs)
+        super().__init__(points, **kwargs)
         self.fraction = fraction
         if kernel_size is None:
             self.kernel_size = _core.get_kernel_size(self.distances, self.fraction)
@@ -47,21 +48,17 @@ class Density(Distances):
             self.kernel_size = kernel_size
         if self.kernel_size <= 0:
             raise ValueError(
-                (
-                    "kernel_size = %s is invalid; must be strictly positive. "
-                    "This can occur in the degenerate case where the distance matrix is all zeros, check your input."
-                )
-                % self.kernel_size
+                f"kernel_size = {self.kernel_size} is invalid; must be "
+                "strictly positive. This can occur in the degenerate case "
+                "where the distance matrix is all zeros, check your input."
             )
         self.density = _core.get_density(self.distances, self.kernel_size)
 
 
 class Graph(Density):
     def __init__(self, points, fraction, **kwargs):
-        super(Graph, self).__init__(points, fraction, **kwargs)
-        self.order = _np.ascontiguousarray(
-            _np.argsort(self.density).astype(_np.intc)[::-1]
-        )
+        super().__init__(points, fraction, **kwargs)
+        self.order = _np.ascontiguousarray(_np.argsort(self.density).astype(_np.intc)[::-1])
         self.delta, self.neighbour = _core.get_delta_and_neighbour(
             self.order, self.distances, self.max_distance
         )
@@ -69,7 +66,7 @@ class Graph(Density):
 
 class Cluster(Graph):
     def __init__(self, points, fraction=0.02, autoplot=True, **kwargs):
-        super(Cluster, self).__init__(points, fraction, **kwargs)
+        super().__init__(points, fraction, **kwargs)
         self.autoplot = autoplot
         if self.autoplot:
             self.draw_decision_graph()
@@ -102,9 +99,7 @@ class Cluster(Graph):
         if self.autoplot:
             self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
-        self.membership = _core.get_membership(
-            self.clusters, self.order, self.neighbour
-        )
+        self.membership = _core.get_membership(self.clusters, self.order, self.neighbour)
         self.border_density, self.border_member = _core.get_border(
             self.kernel_size,
             self.distances,
