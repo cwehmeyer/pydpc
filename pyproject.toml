@@ -8,6 +8,7 @@ description = "Clustering by fast search and find of density peaks"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "LGPL-3.0-or-later"
+license-files = ["LICENSE"]
 authors = [{ name = "Christoph Wehmeyer", email = "wehmeyer.chris@gmail.com" }]
 dependencies = ["numpy >= 1.7", "matplotlib"]
 dynamic = ["version"]
