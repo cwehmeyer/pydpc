@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from setuptools import setup, Extension
 import numpy
 from Cython.Build import cythonize
+from setuptools import Extension, setup
 
 # def extensions():
 #     from numpy import get_include

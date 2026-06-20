@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pydpc import Cluster
 import numpy as np
 from numpy.testing import assert_array_less
 
+from pydpc import Cluster
 
-class TestFourGaussians2D(object):
+
+class TestFourGaussians2D:
     @classmethod
     def setup_class(cls):
         # data generation
@@ -29,12 +30,12 @@ class TestFourGaussians2D(object):
         cls.muy = 1.8
         cls.fraction = 0.02
         cls.points = np.zeros(shape=(cls.npoints, 2), dtype=np.float64)
-        cls.points[:, 0] = np.random.randn(cls.npoints) + cls.mux * (
-            -1
-        ) ** np.random.randint(0, high=2, size=cls.npoints)
-        cls.points[:, 1] = np.random.randn(cls.npoints) + cls.muy * (
-            -1
-        ) ** np.random.randint(0, high=2, size=cls.npoints)
+        cls.points[:, 0] = np.random.randn(cls.npoints) + cls.mux * (-1) ** np.random.randint(
+            0, high=2, size=cls.npoints
+        )
+        cls.points[:, 1] = np.random.randn(cls.npoints) + cls.muy * (-1) ** np.random.randint(
+            0, high=2, size=cls.npoints
+        )
         # cluster initialisation
         cls.dpc = Cluster(cls.points, cls.fraction, autoplot=False)
         cls.dpc.assign(20, 1.5)
