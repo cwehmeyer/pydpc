@@ -37,6 +37,8 @@ Issues = "https://github.com/cwehmeyer/pydpc/issues"
 
 [dependency-groups]
 dev = ["pytest", "pytest-cov", "ruff", "pre-commit", "build"]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]", "mkdocs-jupyter"]
+notebook = ["jupyter"]
 
 [tool.setuptools]
 packages = ["pydpc"]

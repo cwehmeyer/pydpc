@@ -1,14 +1,13 @@
-# pydpc - a Python package for Density Peak-based Clustering
+# pydpc
 
-![CI](https://github.com/cwehmeyer/pydpc/actions/workflows/ci.yml/badge.svg)
-[![PyPI version](https://badge.fury.io/py/pydpc.svg)](https://pypi.python.org/pypi/pydpc)
-[![PyPI downloads](https://img.shields.io/pypi/dm/pydpc.svg)](https://pypi.python.org/pypi/pydpc)
-
-*Clustering by fast search and find of density peaks* was designed by Alex Rodriguez and Alessandro Laio; see their [project page](http://people.sissa.it/~laio/Research/Res_clustering.php) for more information.
+*Clustering by fast search and find of density peaks* was designed by Alex
+Rodriguez and Alessandro Laio; see their
+[project page](http://people.sissa.it/~laio/Research/Res_clustering.php) for
+more information.
 
 The pydpc package aims to make this algorithm available for Python users.
 
-### Installation
+## Installation
 
 Install pydpc via pip from the Python package index
 
@@ -22,7 +21,7 @@ or the latest version from github
 pip install git+https://github.com/cwehmeyer/pydpc.git@master
 ```
 
-### Quick start
+## Quick start
 
 ```python
 import numpy as np
@@ -44,4 +43,6 @@ clu.core_idx     # indices of high-confidence ("core") points
 clu.halo_idx     # indices of low-confidence ("halo") points
 ```
 
-See [`docs/examples/Example01.ipynb`](docs/examples/Example01.ipynb) for a full walkthrough with plots.
+See the [API reference](reference.md) for details on `Cluster`'s parameters
+and attributes, or the [tutorial](examples/Example01.ipynb) for a full
+walkthrough with plots.

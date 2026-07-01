@@ -1,0 +1,48 @@
+site_name: pydpc
+site_description: Clustering by fast search and find of density peaks
+site_url: https://cwehmeyer.github.io/pydpc/
+repo_url: https://github.com/cwehmeyer/pydpc
+repo_name: cwehmeyer/pydpc
+edit_uri: edit/master/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Tutorial: examples/Example01.ipynb
+  - API Reference: reference.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_root_heading: true
+            show_source: false
+            merge_init_into_class: true
+            show_signature_annotations: true
+  - mkdocs-jupyter:
+      include: ["examples/*.ipynb"]
+      execute: false
+      include_source: true
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
