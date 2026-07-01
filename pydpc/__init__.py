@@ -1,6 +1,6 @@
 # This file is part of pydpc.
 #
-# Copyright 2016 Christoph Wehmeyer
+# Copyright 2016-2026 Christoph Wehmeyer
 #
 # pydpc is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -17,8 +17,3 @@
 
 from ._version import __version__  # noqa: F401
 from .dpc import Cluster as Cluster
-
-__author__ = "Christoph Wehmeyer"
-__copyright__ = "Copyright 2016 Christoph Wehmeyer"
-__license__ = "LGPLv3+"
-__email__ = "christoph.wehmeyer@fu-berlin.de"

@@ -1,7 +1,7 @@
 /*
 * This file is part of pydpc.
 *
-* Copyright 2016 Christoph Wehmeyer
+* Copyright 2016-2026 Christoph Wehmeyer
 *
 * pydpc is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as published by
