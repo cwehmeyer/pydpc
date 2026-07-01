@@ -44,6 +44,5 @@ clu.halo_idx     # indices of low-confidence ("halo") points
 ```
 
 See the [API reference](reference.md) for details on `Cluster`'s parameters
-and attributes, or
-[`ipython/Example01.ipynb`](https://github.com/cwehmeyer/pydpc/blob/master/ipython/Example01.ipynb)
-for a full walkthrough with plots.
+and attributes, or the [tutorial](examples/Example01.ipynb) for a full
+walkthrough with plots.

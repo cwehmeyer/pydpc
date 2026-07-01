@@ -24,6 +24,7 @@ theme:
 
 nav:
   - Home: index.md
+  - Tutorial: examples/Example01.ipynb
   - API Reference: reference.md
 
 plugins:
@@ -37,6 +38,10 @@ plugins:
             show_source: false
             merge_init_into_class: true
             show_signature_annotations: true
+  - mkdocs-jupyter:
+      include: ["examples/*.ipynb"]
+      execute: false
+      include_source: true
 
 markdown_extensions:
   - pymdownx.highlight
