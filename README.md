@@ -44,4 +44,4 @@ clu.core_idx     # indices of high-confidence ("core") points
 clu.halo_idx     # indices of low-confidence ("halo") points
 ```
 
-See [`ipython/Example01.ipynb`](ipython/Example01.ipynb) for a full walkthrough with plots.
+See [`docs/examples/Example01.ipynb`](docs/examples/Example01.ipynb) for a full walkthrough with plots.
