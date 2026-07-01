@@ -37,7 +37,7 @@ Repository = "https://github.com/cwehmeyer/pydpc.git"
 Issues = "https://github.com/cwehmeyer/pydpc/issues"
 
 [dependency-groups]
-dev = ["pytest", "pytest-cov", "ruff", "pre-commit"]
+dev = ["pytest", "pytest-cov", "ruff", "pre-commit", "build"]
 
 [tool.setuptools]
 packages = ["pydpc"]
