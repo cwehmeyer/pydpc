@@ -24,6 +24,7 @@ jobs:
         run: |
           python -m venv /tmp/smoke
           /tmp/smoke/bin/pip install dist/*.tar.gz
+          cd /tmp
           /tmp/smoke/bin/python -c "import pydpc; print(pydpc.__version__)"
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
