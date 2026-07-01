@@ -21,3 +21,27 @@ or the latest version from github
 ```bash
 pip install git+https://github.com/cwehmeyer/pydpc.git@master
 ```
+
+### Quick start
+
+```python
+import numpy as np
+from pydpc import Cluster
+
+# a simple bimodal data set: two gaussian blobs centered at x=-4 and x=+4
+npoints = 1000
+points = np.random.randn(npoints, 2)
+points[:, 0] += 4 * np.random.choice([-1, 1], size=npoints)
+
+# computes distances, density, and delta, then shows the decision graph
+clu = Cluster(points)
+
+# pick outliers in the decision graph as cluster centers and assign points
+clu.assign(min_density=25, min_delta=6)
+
+clu.membership   # cluster index for each point
+clu.core_idx     # indices of high-confidence ("core") points
+clu.halo_idx     # indices of low-confidence ("halo") points
+```
+
+See [`ipython/Example01.ipynb`](ipython/Example01.ipynb) for a full walkthrough with plots.
