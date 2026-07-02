@@ -280,6 +280,12 @@ class Cluster(Graph):
             Results are stored on the instance; see the `clusters`,
             `membership`, `border_density`, `border_member`, `halo_idx`, and
             `core_idx` attributes.
+
+        Raises
+        ------
+        ValueError
+            If no point satisfies both thresholds, i.e. no cluster center
+            is found.
         """
         self.min_density = min_density
         self.min_delta = min_delta
@@ -287,6 +293,14 @@ class Cluster(Graph):
         if self.autoplot:
             self.draw_decision_graph(self.min_density, self.min_delta)
         self._get_cluster_indices()
+        if self.nclusters == 0:
+            raise ValueError(
+                f"no cluster centers found for min_density={min_density} and "
+                f"min_delta={min_delta}. Lower one or both thresholds so that "
+                "at least one point qualifies as a cluster center; passing "
+                "empty clusters to the C extension leads to undefined "
+                "behaviour (see GH-8)."
+            )
         self.membership = _core.get_membership(self.clusters, self.order, self.neighbour)
         self.border_density, self.border_member = _core.get_border(
             self.kernel_size,
