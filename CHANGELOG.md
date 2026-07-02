@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped copyright years and removed package metadata (`__author__`,
   `__email__`, `__license__`, `__copyright__`) that duplicated `pyproject.toml`
 
+### Fixed
+
+- `Cluster.assign` now raises a clear `ValueError` instead of passing empty
+  clusters into the C extension, which could previously segfault (GH-8)
+
 ## [0.2.0] - 2026-07-01
 
 First beta release.
