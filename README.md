@@ -48,3 +48,5 @@ clu.halo_idx     # indices of low-confidence ("halo") points
 ```
 
 See [`docs/examples/Example01.ipynb`](docs/examples/Example01.ipynb) for a full walkthrough with plots.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for release history.
