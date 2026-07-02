@@ -222,24 +222,36 @@ class Cluster(Graph):
         fig : matplotlib.figure.Figure
         ax : matplotlib.axes.Axes
         """
-        fig, ax = _plt.subplots(figsize=(5, 5))
-        ax.scatter(self.density, self.delta, s=40)
+        fig, ax = _plt.subplots(figsize=(5, 5), constrained_layout=True)
+        ax.scatter(
+            self.density,
+            self.delta,
+            s=40,
+            color="#4c72b0",
+            alpha=0.75,
+            edgecolor="white",
+            linewidth=0.5,
+        )
         if min_density is not None and min_delta is not None:
             ax.plot(
                 [min_density, self.density.max()],
                 [min_delta, min_delta],
                 linewidth=2,
-                color="red",
+                linestyle="--",
+                color="#c44e52",
             )
             ax.plot(
                 [min_density, min_density],
                 [min_delta, self.delta.max()],
                 linewidth=2,
-                color="red",
+                linestyle="--",
+                color="#c44e52",
             )
-        ax.set_xlabel(r"density", fontsize=20)
-        ax.set_ylabel(r"delta / a.u.", fontsize=20)
-        ax.tick_params(labelsize=15)
+        ax.set_xlabel(r"density", fontsize=13)
+        ax.set_ylabel(r"delta / a.u.", fontsize=13)
+        ax.tick_params(labelsize=11)
+        ax.grid(alpha=0.3)
+        ax.spines[["top", "right"]].set_visible(False)
         return fig, ax
 
     def assign(self, min_density, min_delta, border_only=False):
