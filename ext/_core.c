@@ -17,6 +17,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -57,10 +58,10 @@ static double distance(double *points, int n, int m, int ndim)
     return sqrt(sum);
 }
 
-static void mixed_sort(double *array, int L, int R)
+static void mixed_sort(double *array, int64_t L, int64_t R)
 /* mixed_sort() is based on examples from http://www.linux-related.de (2004) */
 {
-    int l, r;
+    int64_t l, r;
     double swap;
     if(R - L > 25) /* use quicksort */
     {
@@ -99,13 +100,15 @@ static void mixed_sort(double *array, int L, int R)
 
 extern void _get_distances(double *points, int npoints, int ndim, double *distances)
 {
-    int i, j, o;
+    /* i, j, o are widened to 64 bits: for npoints above ~46,000, i * npoints
+     * overflows a 32-bit int, corrupting the flat index into `distances`. */
+    int64_t i, j, o;
     for(i=0; i<npoints-1; ++i)
     {
         o = i * npoints;
         for(j=i+1; j<npoints; ++j)
         {
-            distances[o + j] = distance(points, i, j, ndim);
+            distances[o + j] = distance(points, (int) i, (int) j, ndim);
             distances[j * npoints + i] = distances[o + j];
         }
     }
@@ -113,7 +116,11 @@ extern void _get_distances(double *points, int npoints, int ndim, double *distan
 
 extern double _get_kernel_size(double *distances, int npoints, double fraction)
 {
-    int i, j, o, m = 0, n = (npoints * (npoints - 1)) / 2;
+    /* npoints * (npoints - 1) overflows a 32-bit int well before npoints
+     * reaches the tens of thousands, corrupting the malloc size below
+     * (GH-6); the explicit cast forces the multiplication to happen in
+     * 64 bits. */
+    int64_t i, j, o, m = 0, n = ((int64_t) npoints * (npoints - 1)) / 2;
     double kernel_size;
     double *scratch = (double*) malloc(n * sizeof(double));
     for(i=0; i<npoints-1; ++i)
@@ -123,7 +130,7 @@ extern double _get_kernel_size(double *distances, int npoints, double fraction)
             scratch[m++] = distances[o + j];
     }
     mixed_sort(scratch, 0, n - 1);
-    kernel_size = scratch[(int) floor(0.5 + fraction * n)];
+    kernel_size = scratch[(int64_t) floor(0.5 + fraction * n)];
 
     /* kernel_size is used as a divisor, it can't be zero. Fall back to the first
      * nonzero value. Technically, they *could* all be zero (degenerate case
@@ -132,7 +139,7 @@ extern double _get_kernel_size(double *distances, int npoints, double fraction)
      */
     if(kernel_size == 0.0)
     {
-        for(int i = 0; i < n; i++)
+        for(int64_t i = 0; i < n; i++)
         {
             if(scratch[i] != 0.0)
             {
@@ -148,7 +155,7 @@ extern double _get_kernel_size(double *distances, int npoints, double fraction)
 
 extern void _get_density(double kernel_size, double *distances, int npoints, double *density)
 {
-    int i, j, o;
+    int64_t i, j, o;
     double rho;
     for(i=0; i<npoints-1; ++i)
     {
@@ -165,7 +172,7 @@ extern void _get_density(double kernel_size, double *distances, int npoints, dou
 extern void _get_delta_and_neighbour(
     double max_distance, double *distances, int *order, int npoints, double *delta, int *neighbour)
 {
-    int i, j, o;
+    int64_t i, j, o;
     double max_delta = 0.0;
     for(i=0; i<npoints; ++i)
     {
@@ -175,7 +182,7 @@ extern void _get_delta_and_neighbour(
     delta[order[0]] = -1.0;
     for(i=1; i<npoints; ++i)
     {
-        o = order[i] * npoints;
+        o = (int64_t) order[i] * npoints;
         for(j=0; j<i; ++j)
         {
             if(distances[o + order[j]] < delta[order[i]])
@@ -208,7 +215,7 @@ extern void _get_border(
     double kernel_size, double *distances, double *density, int *membership, int npoints,
     int *border_member, double *border_density)
 {
-    int i, j, o;
+    int64_t i, j, o;
     double average_density;
     for(i=0; i<npoints-1; ++i)
     {

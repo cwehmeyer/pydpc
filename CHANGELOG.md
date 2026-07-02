@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Cluster.assign` now raises a clear `ValueError` instead of passing empty
   clusters into the C extension, which could previously segfault (GH-8)
+- Widened 32-bit index/size arithmetic in the C extension to 64 bits,
+  fixing a crash on datasets with roughly 46,000+ points caused by integer
+  overflow, not by memory exhaustion (GH-6)
 
 ## [0.2.0] - 2026-07-01
 
