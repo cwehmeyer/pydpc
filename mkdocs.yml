@@ -26,6 +26,7 @@ nav:
   - Home: index.md
   - Tutorial: examples/Example01.ipynb
   - API Reference: reference.md
+  - Changelog: changelog.md
 
 plugins:
   - search
@@ -46,3 +47,5 @@ plugins:
 markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: ["."]
